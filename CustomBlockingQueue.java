@@ -14,19 +14,20 @@ public class CustomBlockingQueue<E> {
             wait();
         }
         if (queue.size() < count) {
+            queue.add(e);
+            count++;
             notify();
         }
-        queue.add(e);
-        count++;
     }
 
     public synchronized Object dequeue() throws InterruptedException { // Извлечение элемента из очереди
         while (queue.isEmpty()) {
             wait();
         }
-        notify();
         count--;
-        return queue.remove(0);
+        Object o = queue.remove(0);
+        notify();
+        return o;
     }
 
     public synchronized int size() {
